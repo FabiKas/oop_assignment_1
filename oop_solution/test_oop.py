@@ -1,91 +1,73 @@
-from library_oop import Book, Member
+from library_oop import Library
 
-def test_book_and_member():
+def test_library_system():
     print("=" * 60)
-    print("LIBRARY MANAGEMENT SYSTEM - CLASS TEST")
+    print("LIBRARY MANAGEMENT SYSTEM - COMPREHENSIVE TEST")
     print("=" * 60)
+
+    library = Library()
 
     print("\n--- TEST 1: Adding Books ---")
-    book1 = Book(1, "Python Crash Course", "Eric Matthes", 3)
-    book2 = Book(2, "Clean Code", "Robert Martin", 2)
-    book3 = Book(3, "The Pragmatic Programmer", "Hunt & Thomas", 1)
-    book4 = Book(4, "Design Patterns", "Gang of Four", 2)
-    books = [book1, book2, book3, book4]
-    for book in books:
-        print(f"Book '{book.title}' added successfully!")
+    library.add_book(1, "Python Crash Course", "Eric Matthes", 3)
+    library.add_book(2, "Clean Code", "Robert Martin", 2)
+    library.add_book(3, "The Pragmatic Programmer", "Hunt & Thomas", 1)
+    library.add_book(4, "Design Patterns", "Gang of Four", 2)
 
     print("\n--- TEST 2: Registering Members ---")
-    member1 = Member(101, "Alice Smith", "alice@email.com")
-    member2 = Member(102, "Bob Jones", "bob@email.com")
-    member3 = Member(103, "Carol White", "carol@email.com")
-    members = [member1, member2, member3]
-    for member in members:
-        print(f"Member '{member.name}' registered successfully!")
+    library.add_member(101, "Alice Smith", "alice@email.com")
+    library.add_member(102, "Bob Jones", "bob@email.com")
+    library.add_member(103, "Carol White", "carol@email.com")
 
     print("\n--- TEST 3: Display Available Books ---")
-    print("\n=== Available Books ===")
-    for book in books:
-        print(f"{book.title} by {book.author} - {book.available_copies} copies available")
+    library.display_available_books()
 
     print("\n--- TEST 4: Successful Borrowing ---")
-    member1.borrow_book(book1)
-    member1.borrow_book(book2)
-    member2.borrow_book(book1)
+    library.borrow_book(101, 1)
+    library.borrow_book(101, 2)
+    library.borrow_book(102, 1)
 
     print("\n--- TEST 5: Display Member's Books ---")
-    for member in members:
-        member.display_borrowed_books(books)
+    library.display_member_books(101)
+    library.display_member_books(102)
+    library.display_member_books(103)
 
     print("\n--- TEST 6: Available Books After Borrowing ---")
-    print("\n=== Available Books ===")
-    for book in books:
-        print(f"{book.title} by {book.author} - {book.available_copies} copies available")
+    library.display_available_books()
 
     print("\n--- TEST 7: Borrowing Last Copy ---")
-    member3.borrow_book(book3)
-    print("\n=== Available Books ===")
-    for book in books:
-        print(f"{book.title} by {book.author} - {book.available_copies} copies available")
+    library.borrow_book(103, 3)
+    library.display_available_books()
 
     print("\n--- TEST 8: Attempting to Borrow Unavailable Book ---")
-    member2.borrow_book(book3)
+    library.borrow_book(102, 3)
 
-    print("\n--- TEST 9: Borrowing Limit Test ---")
-    member1.borrow_book(book4)
-    member1.display_borrowed_books(books)
-    member1.borrow_book(book3)
+    print("\n--- TEST 9: Testing Borrowing Limit (3 books max) ---")
+    library.borrow_book(101, 4)
+    library.display_member_books(101)
+    library.borrow_book(101, 3)
 
     print("\n--- TEST 10: Returning Books ---")
-    member1.return_book(book1)
-    member2.return_book(book1)
-    member1.display_borrowed_books(books)
-    print("\n=== Available Books ===")
-    for book in books:
-        print(f"{book.title} by {book.author} - {book.available_copies} copies available")
+    library.return_book(101, 1)
+    library.return_book(102, 1)
+    library.display_member_books(101)
+    library.display_available_books()
 
     print("\n--- TEST 11: Attempting Invalid Return ---")
-    member2.return_book(book2)
+    library.return_book(102, 2)
 
     print("\n--- TEST 12: Return and Re-borrow ---")
-    member3.return_book(book3)
-    member2.borrow_book(book3)
-    member2.display_borrowed_books(books)
+    library.return_book(103, 3)
+    library.borrow_book(102, 3)
+    library.display_member_books(102)
 
     print("\n--- TEST 13: Error Handling ---")
-    fake_member = Member(999, "Ghost", "ghost@email.com")
-    fake_member.borrow_book(book1)
-    member1.borrow_book(Book(999, "Nonexistent", "Nobody", 1))
-    fake_member.return_book(book1)
-    fake_member.display_borrowed_books(books)
+    library.borrow_book(999, 1)
+    library.borrow_book(101, 999)
+    library.return_book(999, 1)
+    library.display_member_books(999)
 
     print("\n--- TEST 14: Final Library Status ---")
-    print("\nAll Members and Their Books:")
-    for member in members:
-        member.display_borrowed_books(books)
-
-    print("\n=== Available Books ===")
-    for book in books:
-        print(f"{book.title} by {book.author} - {book.available_copies} copies available")
+    library.display_final_status()
 
     print("\n" + "=" * 60)
     print("TEST COMPLETE")
@@ -93,4 +75,4 @@ def test_book_and_member():
 
 
 if __name__ == "__main__":
-    test_book_and_member()
+    test_library_system()
